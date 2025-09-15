@@ -89,3 +89,34 @@ class TestingTools:
                     logging.info("Testpersonen opgeslagen in %s", testpersonen)
         except rq.exceptions.RequestException as e:
             logging.error("Fout bij het downloaden van testpersonen: %s", e)
+
+    def bsn_testbestand(self):
+        """
+        Genereer een testbestand met geldige en ongeldige BSN-nummers.
+
+        Het bestand wordt opgeslagen als ``bsn_testbestand.csv`` in de outputdirectory.
+        Het bestand bevat zowel geldige als ongeldige BSN-nummers voor testdoeleinden.
+        """
+        bsn_bestand = self.output_dir / "bsn_testbestand.csv"
+        bsn_nummers = [
+            "123456782",  # Geldig
+            "987654321",  # Ongeldig
+            "111222333",  # Ongeldig
+            "123456789",  # Ongeldig
+            "876543210",  # Ongeldig
+            "234567890",  # Ongeldig
+            "345678901",  # Ongeldig
+            "456789012",  # Ongeldig
+            "567890123",  # Ongeldig
+            "678901234",  # Ongeldig
+            "789012345",  # Ongeldig
+            "890123456",  # Ongeldig
+            "901234567",  # Ongeldig
+            "012345678",  # Ongeldig
+            "135792468",  # Geldig
+            "246813579"   # Geldig
+        ]
+        with open(bsn_bestand, "w", encoding="utf-8") as file:
+            for bsn in bsn_nummers:
+                file.write(f"{bsn}\n")
+        logging.info("BSN testbestand opgeslagen in %s", bsn_bestand)

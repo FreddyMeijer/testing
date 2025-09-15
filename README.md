@@ -1,2 +1,86 @@
-# testing
-In this repository I have created tools to create testdata
+# TestingTools
+
+## Overzicht
+
+`TestingTools` is een Python-module met hulpmiddelen voor het genereren
+van testbestanden en het configureren van logging.
+
+De klasse maakt automatisch de benodigde **output**- en
+**logging**-mappen aan in de directory waar het script wordt
+uitgevoerd.\
+Daarnaast configureert het logging zodat berichten naar zowel de
+**console** als een **logbestand** worden geschreven.\
+Met de ingebouwde methode kun je eenvoudig testpersonen downloaden via
+de API van [randomuser.me](https://randomuser.me).
+
+------------------------------------------------------------------------
+
+## Installatie
+
+Zorg dat Python 3.10+ geïnstalleerd is en installeer de
+afhankelijkheden:
+
+``` bash
+pip install requests
+```
+
+------------------------------------------------------------------------
+
+## Gebruik
+
+### Voorbeeldscript
+
+``` python
+from testingtools import TestingTools
+
+# Maak een sessie aan
+sessie = TestingTools()
+
+# Download 100 testpersonen en sla deze op in output/testpersonen.csv
+sessie.testbestand_personen(100)
+```
+
+Na uitvoeren vind je: - `output/testpersonen.csv` met testpersonen -
+`logging/app.log` met logmeldingen
+
+### Logging
+
+De logging wordt automatisch ingesteld: - INFO en foutmeldingen
+verschijnen in de **console** - Alle berichten worden ook weggeschreven
+naar `logging/app.log`
+
+------------------------------------------------------------------------
+
+## Klassen en Methoden
+
+### `class TestingTools`
+
+Hulpmiddelen voor het genereren van testbestanden en het configureren
+van logging.
+
+**Attributen** - `script_dir` : de directory waarin dit script zich
+bevindt\
+- `output_dir` : directory waarin outputbestanden worden opgeslagen\
+- `logging_dir` : directory waarin logbestanden worden opgeslagen\
+- `log_file` : pad naar het logbestand (`app.log`)
+
+#### `__init__()`
+
+Initialiseert de klasse, maakt directories aan en configureert logging.
+
+#### `testbestand_personen(aantal: int)`
+
+Download een CSV-bestand met willekeurige personen via `randomuser.me`.
+
+Parameters: - `aantal` *(int)* -- het aantal testpersonen dat moet
+worden opgehaald
+
+Raises: - `requests.exceptions.RequestException` -- indien er een fout
+optreedt bij het ophalen
+
+------------------------------------------------------------------------
+
+## Licentie
+
+Dit project is vrij te gebruiken en te verspreiden onder de
+MIT-licentie.

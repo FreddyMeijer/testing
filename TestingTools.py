@@ -8,6 +8,7 @@ activiteiten.
 """
 
 import logging
+import random
 import pathlib as pl
 
 import requests as rq
@@ -90,6 +91,27 @@ class TestingTools:
         except rq.exceptions.RequestException as e:
             logging.error("Fout bij het downloaden van testpersonen: %s", e)
 
+    def genereer_bsn(self):
+        """
+        Genereer een willekeurig geldig BSN-nummer.
+
+
+        Er wordt een willekeurig getal van 10 cijfers samengesteld. Het resultaat
+        wordt gecontroleerd met de methode `test_bsnnummer`. Alleen een geldig BSN
+        volgens de 11-proef wordt geretourneerd.
+
+
+        Returns
+        -------
+        str
+        Een geldig BSN-nummer als string.
+        """
+        bsn = ""
+        while True:
+            bsn = "".join(str(random.randint(0, 9)) for _ in range(9))
+            if self.test_bsnnummer(int(bsn)):
+                return bsn
+
     def test_bsnnummer(self, bsn: int):
         """
         Controleer of een gegeven BSN-nummer geldig is volgens de 11-proef.
@@ -111,7 +133,7 @@ class TestingTools:
         bool
         `True` als het BSN geldig is volgens de 11-proef, `False` als het ongeldig is.
         """
-        bsnstring = str(bsn)
+        bsnstring = str(bsn).zfill(9)
 
         totaal = (int(bsnstring[0]) * 9)+(int(bsnstring[1]) * 8)+(int(bsnstring[2]) * 7)+(int(bsnstring[3]) * 6)+(int(
             bsnstring[4]) * 5)+(int(bsnstring[5]) * 4)+(int(bsnstring[6]) * 3)+(int(bsnstring[7]) * 2)+(int(bsnstring[8]) * -1)
@@ -122,5 +144,3 @@ class TestingTools:
         else:
             logging.warning("BSN nummer %i is ongeldig", bsn)
             return False
-
-

@@ -78,6 +78,24 @@ worden opgehaald
 Raises: - `requests.exceptions.RequestException` -- indien er een fout
 optreedt bij het ophalen
 
+#### `test_bsnnummer(bsn: int) -> bool`
+
+
+Controleert of een gegeven BSN-nummer geldig is volgens de Nederlandse 11-proef.
+
+
+**Parameters**
+- `bsn` *(int)* – het Burgerservicenummer dat gecontroleerd moet worden
+
+
+**Returns**
+- `bool` – `True` als het BSN geldig is, `False` als het ongeldig is
+
+
+**Logging**
+- Geldig BSN wordt gelogd op INFO-niveau
+- Ongeldig BSN wordt gelogd op WARNING-niveau
+
 ------------------------------------------------------------------------
 
 ## Licentie

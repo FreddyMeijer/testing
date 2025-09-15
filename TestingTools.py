@@ -90,33 +90,37 @@ class TestingTools:
         except rq.exceptions.RequestException as e:
             logging.error("Fout bij het downloaden van testpersonen: %s", e)
 
-    def bsn_testbestand(self):
+    def test_bsnnummer(self, bsn: int):
         """
-        Genereer een testbestand met geldige en ongeldige BSN-nummers.
+        Controleer of een gegeven BSN-nummer geldig is volgens de 11-proef.
 
-        Het bestand wordt opgeslagen als ``bsn_testbestand.csv`` in de outputdirectory.
-        Het bestand bevat zowel geldige als ongeldige BSN-nummers voor testdoeleinden.
+
+        De functie gebruikt de Nederlandse 11-proef om te verifiëren of het
+        BSN-nummer correct is. Er wordt gelogd of het nummer geldig of ongeldig
+        is.
+
+
+        Parameters
+        ----------
+        bsn : int
+        Het Burgerservicenummer dat gecontroleerd moet worden.
+
+
+        Returns
+        -------
+        bool
+        `True` als het BSN geldig is volgens de 11-proef, `False` als het ongeldig is.
         """
-        bsn_bestand = self.output_dir / "bsn_testbestand.csv"
-        bsn_nummers = [
-            "123456782",  # Geldig
-            "987654321",  # Ongeldig
-            "111222333",  # Ongeldig
-            "123456789",  # Ongeldig
-            "876543210",  # Ongeldig
-            "234567890",  # Ongeldig
-            "345678901",  # Ongeldig
-            "456789012",  # Ongeldig
-            "567890123",  # Ongeldig
-            "678901234",  # Ongeldig
-            "789012345",  # Ongeldig
-            "890123456",  # Ongeldig
-            "901234567",  # Ongeldig
-            "012345678",  # Ongeldig
-            "135792468",  # Geldig
-            "246813579"   # Geldig
-        ]
-        with open(bsn_bestand, "w", encoding="utf-8") as file:
-            for bsn in bsn_nummers:
-                file.write(f"{bsn}\n")
-        logging.info("BSN testbestand opgeslagen in %s", bsn_bestand)
+        bsnstring = str(bsn)
+
+        totaal = (int(bsnstring[0]) * 9)+(int(bsnstring[1]) * 8)+(int(bsnstring[2]) * 7)+(int(bsnstring[3]) * 6)+(int(
+            bsnstring[4]) * 5)+(int(bsnstring[5]) * 4)+(int(bsnstring[6]) * 3)+(int(bsnstring[7]) * 2)+(int(bsnstring[8]) * -1)
+
+        if totaal % 11 == 0:
+            logging.info("BSN nummer %i is geldig", bsn)
+            return True
+        else:
+            logging.warning("BSN nummer %i is ongeldig", bsn)
+            return False
+
+

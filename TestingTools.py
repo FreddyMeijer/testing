@@ -10,6 +10,7 @@ activiteiten.
 import logging
 import random
 import pathlib as pl
+import names as nm
 
 import requests as rq
 
@@ -90,6 +91,45 @@ class TestingTools:
                     logging.info("Testpersonen opgeslagen in %s", testpersonen)
         except rq.exceptions.RequestException as e:
             logging.error("Fout bij het downloaden van testpersonen: %s", e)
+
+    def genereer_naam(self):
+        """
+        Genereer een willekeurige Nederlandse voor- en achternaam.
+
+
+        De functie maakt gebruik van de `names`-bibliotheek om een willekeurige
+        voornaam en achternaam te genereren. De gegenereerde naam wordt geretourneerd
+        als een tuple van strings.
+
+
+        Returns
+        -------
+        tuple
+        Een tuple met twee elementen: (voornaam, achternaam).
+        """
+        voornaam = nm.get_first_name()
+        achternaam = nm.get_last_name()
+        return voornaam, achternaam
+
+    def genereer_geboortedatum(self):
+        """
+        Genereer een willekeurige geboortedatum in de vorm 'DD-MM-YYYY'.
+
+
+        De functie genereert een willekeurige dag, maand en jaar binnen
+        realistische grenzen (jaar tussen 1950 en 2023). De datum wordt
+        geretourneerd als een string in het formaat 'DD-MM-YYYY'.
+
+
+        Returns
+        -------
+        str
+        Een willekeurige geboortedatum als string in het formaat 'DD-MM-YYYY'.
+        """
+        dag = random.randint(1, 28)
+        maand = random.randint(1, 12)
+        jaar = random.randint(1950, 2023)
+        return f"{dag:02d}-{maand:02d}-{jaar}"
 
     def genereer_bsn(self):
         """

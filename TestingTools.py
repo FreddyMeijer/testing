@@ -91,6 +91,73 @@ class TestingTools:
                     logging.info("Testpersonen opgeslagen in %s", testpersonen)
         except rq.exceptions.RequestException as e:
             logging.error("Fout bij het downloaden van testpersonen: %s", e)
+    
+    def genereer_postcode(self):
+        """
+        Genereer een willekeurige Nederlandse postcode.
+
+
+        De functie genereert een postcode in het formaat '1234 AB'.
+        Het resultaat wordt geretourneerd als een string.
+
+
+        Returns
+        -------
+        str
+        Een willekeurig gegenereerde postcode als string.
+        """
+        cijfers = random.randint(1000, 9999)
+        letters = ''.join(random.choices('ABCDEFGHIJKLMNOPQRSTUVWXYZ', k=2))
+        postcode = f"{cijfers} {letters}"
+        logging.info("Postcode %s is aangemaakt", postcode)
+        return postcode
+    
+    def genereer_telefoonnummer(self):
+        """
+        Genereer een willekeurig Nederlands telefoonnummer.
+
+
+        De functie genereert een telefoonnummer in het formaat '06-12345678'.
+        Het resultaat wordt geretourneerd als een string.
+
+
+        Returns
+        -------
+        str
+        Een willekeurig gegenereerd telefoonnummer als string.
+        """
+        nummer = f"06{random.randint(10000000, 99999999)}"
+        logging.info("Telefoonnummer %s is aangemaakt", nummer)
+        return nummer
+                
+    def genereer_email(self, voornaam: str, achternaam: str):
+        """
+        Genereer een willekeurig e-mailadres op basis van voor- en achternaam.
+
+
+        De functie maakt gebruik van een lijst met veelvoorkomende domeinnamen
+        om een realistisch ogend e-mailadres te genereren. Het resultaat wordt
+        geretourneerd als een string.
+
+
+        Parameters
+        ----------
+        voornaam : str
+            De voornaam van de persoon.
+        achternaam : str
+            De achternaam van de persoon.
+
+
+        Returns
+        -------
+        str
+        Een willekeurig gegenereerd e-mailadres als string.
+        """
+        domeinen = ["gmail.com", "yahoo.com", "outlook.com", "hotmail.com", "example.com"]
+        domein = random.choice(domeinen)
+        email = f"{voornaam.lower()}.{achternaam.lower()}@{domein}"
+        logging.info("Email %s is aangemaakt", email)
+        return email
 
     def genereer_naam(self):
         """
@@ -107,9 +174,9 @@ class TestingTools:
         tuple
         Een tuple met twee elementen: (voornaam, achternaam).
         """
-        voornaam = nm.get_first_name()
-        achternaam = nm.get_last_name()
-        return voornaam, achternaam
+        naam = nm.get_full_name()
+        logging.info("Naam %s is aangemaakt", naam)
+        return naam
 
     def genereer_geboortedatum(self):
         """
@@ -184,3 +251,21 @@ class TestingTools:
         else:
             logging.warning("BSN nummer %i is ongeldig", bsn)
             return False
+
+tools = TestingTools()
+
+bestand = ["Voornaam,Achternaam,Geboortedatum,BSN,Email,telefoonnummer,postcode"]
+
+for i in range(5):
+    naam = tools.genereer_naam()
+    voornaam = naam.split()[0]
+    achternaam = naam.split()[-1]
+    geboortedaum = tools.genereer_geboortedatum()
+    bsn = tools.genereer_bsn()
+    telefoonnummer = tools.genereer_telefoonnummer()
+    email = tools.genereer_email(voornaam, achternaam)
+    postcode = tools.genereer_postcode()
+    bestand.append(f"{voornaam},{achternaam},{geboortedaum},{bsn},{email},{telefoonnummer},{postcode}")
+    
+with open(tools.output_dir / "gegenereerd.csv", "w", encoding="utf-8") as f:
+    f.write("\n".join(bestand))
